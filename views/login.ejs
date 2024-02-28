@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login page</title>
+</head>
+<body>
+    <% include menu %>
+    <h1>Welcome to the login page</h1>
+    <form method="POST" action="/login">
+        <div>
+            <input type="text" placeholder="username" name="username">
+        </div>
+        <div>
+            <input type="password" placeholder="password" name="password">
+        </div>
+        <span>
+            you don't have an account. <a href="/signup">sign-up</a>
+        </span>
+        <div>
+            <input type="submit" value="Login">
+        </div>
+    </form>
+    <% include error %>
+</body>
+</html>

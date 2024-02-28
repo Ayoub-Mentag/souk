@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <% include menu %>
+    <h1>Welcome <%= locals.user.username %></h1>
+    <% include products %>
+  </body>
+</html>

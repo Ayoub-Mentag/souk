@@ -1,0 +1,15 @@
+<% products.forEach((product) => { %>
+    <div>
+        <p><%= product.id %></p>
+        <p><%= product.title %></p>
+        <p><%= product.description %></p>
+        <p></p><%= product.price %></p>
+        <% if (locals.user.username == "admin") { %> 
+            <ul>
+                <a href="/products" onclick="fetch('/products/<%=product.id%>', {method: 'DELETE'})">Delete</a>
+                <a href="/productForm/<%=product.id%>">Update</a>
+            </ul>
+        <% } %>
+        <br>
+    </div>
+<% }) %>
