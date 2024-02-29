@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Login page</title>
+    <link rel="stylesheet" href="/stylesheets/form.css">`
 </head>
 <body>
-    <% include menu %>
-    <h1>Welcome to the home page</h1>
-    <form method="POST" action="/signup">
-        <div>
-            <input type="text" placeholder="username" name="username">
+    <h2 style="text-align: center;">Sign up Form</h2>
+
+    <form action="/signup" method="post">
+        <div class="imgcontainer">
+            <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar">
         </div>
-        <div>
-            <input type="password" placeholder="password" name="password">
-        </div>
-        <span>
-            you have an account. <a href="/login">log-in</a>
-        </span>
-        <div>
-            <input type="submit" value="Sign up">
+        <div class="container">
+            <label><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" required>
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required>
+            <button type="submit">Sign up</button>
         </div>
     </form>
+    <p style="text-align: center;">If you have an account you can login hree <a href="/login">Log in</a></p>
 </body>
 </html>

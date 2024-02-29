@@ -2,13 +2,11 @@
 <html>
   <head>
     <title>Home</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
     <% include menu %>
-    <a href="/productForm">Add a product</a>
     <h1>Welcome <%= locals.user.username %></h1>
-    
     <% include products %>
   </body>
 </html>

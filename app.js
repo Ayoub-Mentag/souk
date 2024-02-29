@@ -4,9 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var product = require('./routes/product');
+var card = require('./routes/card');
 var user = require('./routes/user');
 const session = require('express-session');
-var auth_user = require('./middleware/user');
+var permission = require('./middleware/user');
 const { Product } = require('./models/product');
 var app = express();
 
@@ -19,7 +20,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 app.use(session({
   secret: 'secret',
@@ -27,7 +28,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-app.use(auth_user);
+// app.use(permission.permission);
 app.get('/products', product.all);
 app.post('/products/:id', product.update);;
 app.post('/products', product.create);
@@ -56,7 +57,6 @@ app.put('/users', user.update);
 
 
 // *************************Admin************************
-app.get('/dashboard', product.all);
 
 // form to add a product
 app.get('/productForm', (req, res, next) => res.render('productForm', {product: {}}));
@@ -65,10 +65,16 @@ app.get('/productForm/:id', (req, res, next) => {
     if (err) next(err);
     res.render('productForm', {product: product})
   });
-  }
+}
 );
 // ******************************************************
 
+// *************************Card************************
+app.post('/addToCard', card.createOrUpdate);
+
+app.get('/card', card.all);
+
+// *****************************************************
 
 
 

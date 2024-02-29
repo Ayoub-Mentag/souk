@@ -1,11 +1,15 @@
-<% if (locals.user) { %>
-    <div id='menu'>
-        <a href='/post'>post</a>
-        <a href='/logout'>logout</a>
-    </div>
-<% } else { %>
-    <div id='menu'>
-    <a href='/login'>login</a>
-    <a href='/register'>register</a>
-    </div>
-<% } %>
+<header>
+    <% if (locals.user) { %>
+        <div id='menu'>
+            <% if (locals.user.username == 'admin') { %>
+                <a href="/productForm">Add a product</a>
+            <% } %>
+            <a href='/logout'>logout</a>
+        </div>
+    <% } else { %>
+        <div id='menu'>
+        <a href='/login'>login</a>
+        <a href='/register'>register</a>
+        </div>
+    <% } %>
+</header>

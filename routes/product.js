@@ -3,10 +3,14 @@ const Product = require('../models/product').Product;
 exports.all = (req, res, next) => {
   Product.all((err, products) => {
     if (err) next(err);
-    if (req.url === "/dashboard")
-      res.render('dashboard', {products: products});
-    else
-      res.render('index', {products: products});
+    res.format({
+      html: () => {
+        res.send(products);
+      },
+      json: () => {
+        res.render('index', {products: products});
+      }
+    });
   });
 }
 

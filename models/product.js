@@ -34,6 +34,7 @@ class Product {
         db.run(sql, data.title, data.description, data.price, data.imgurl, cb);
     }
 
+
     static delete(id, cb) {
         if (!id) return cb(new Error('Please provide an id'));
         db.run('DELETE FROM products WHERE id = ?', id, cb);

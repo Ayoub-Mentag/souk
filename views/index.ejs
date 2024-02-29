@@ -3,9 +3,11 @@
   <head>
     <title>Home</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/dashboard.css">
   </head>
   <body>
     <% include menu %>
+    <br><br>
     <h1>Welcome <%= locals.user.username %></h1>
     <% include products %>
   </body>

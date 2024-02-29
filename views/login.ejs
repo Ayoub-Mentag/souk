@@ -4,24 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login page</title>
+    <link rel="stylesheet" href="/stylesheets/form.css">`
 </head>
 <body>
-    <% include menu %>
-    <h1>Welcome to the login page</h1>
-    <form method="POST" action="/login">
-        <div>
-            <input type="text" placeholder="username" name="username">
+    <h2 style="text-align: center;">Login Form</h2>
+
+    <form action="/login" method="post">
+        <div class="imgcontainer">
+            <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar">
         </div>
-        <div>
-            <input type="password" placeholder="password" name="password">
-        </div>
-        <span>
-            you don't have an account. <a href="/signup">sign-up</a>
-        </span>
-        <div>
-            <input type="submit" value="Login">
+        <div class="container">
+            <label><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" required>
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" required>
+            <button type="submit">Login</button>
         </div>
     </form>
+    <p style="text-align: center;">If you dont't have an account you can sign up hree <a href="/signup">sign up</a></p>
     <% include error %>
 </body>
 </html>

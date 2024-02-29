@@ -1,15 +1,22 @@
+
+
 <% products.forEach((product) => { %>
-    <div>
-        <p><%= product.id %></p>
-        <p><%= product.title %></p>
+    <div class="card">
+        <img src="<%=product.imgurl%>" alt="Denim Jeans" style="width:100%">
+        <h1><%= product.title %></h1>
+        <p class="price"><%= product.price %>$</p>
         <p><%= product.description %></p>
-        <p></p><%= product.price %></p>
-        <% if (locals.user.username == "admin") { %> 
-            <ul>
-                <a href="/products" onclick="fetch('/products/<%=product.id%>', {method: 'DELETE'})">Delete</a>
-                <a href="/productForm/<%=product.id%>">Update</a>
-            </ul>
+        <% if (locals.user.username == "admin") { %>
+            <p><button><a href="/products" onclick="fetch('/products/<%=product.id%>', {method: 'DELETE'})">Delete</a></button></p>
+            <p><button><a href="/productForm/<%=product.id%>">Update</a></button></p>
+        <% } else { %>
+            <p>
+                <!-- <button onclick="fetch('/addToCard', {method: 'POST'}, {body: {'productId': '<%=product.id%>', 'userId': '<%=locals.user.id%>'}})"> -->
+                <button>
+                    <a href="" onclick="fetch('/addToCard', {method: 'POST'}, {body: {'productId': '<%=product.id%>', 'userId': '<%=locals.user.id%>'}})">Add to Cart</a>
+                </button>
+            </p>
         <% } %>
-        <br>
+
     </div>
 <% }) %>

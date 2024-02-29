@@ -1,6 +1,7 @@
 const User = require('../models/user').User;
 const crypto = require('crypto');
 
+
 function simpleHash(input) {
     const hash = crypto.createHash('sha256');
     hash.update(input);
@@ -14,6 +15,7 @@ exports.all = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
+    console.log(req.body);
     let user = req.body;
     user.password = simpleHash(user.password);
     User.create(user, (err) => {
@@ -33,12 +35,7 @@ exports.login = (req, res, next) => {
         }
         else {
             req.session.uid = data.id;
-            if (data.username == "admin") {
-                res.redirect('/dashboard');
-            }
-            else {
                 res.redirect('/products');
-            }
         }
     });
 }

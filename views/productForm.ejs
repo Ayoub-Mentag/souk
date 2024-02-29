@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/productform.css">
     <title>Document</title>
 </head>
 <body>
-    <form method="POST" action="/products/<%= product.title || '' %>">
+    <form method="POST" action="/products/<%= product.id || '' %>">
         <div>
-            <input type="text" name="title" value="<%= product.title || '' %>">
+            <input type="text" name="title" value="<%= product.title || '' %>" placeholder="title">
         </div>
         <div>
-            <input type="text" name="description" value="<%= product.title || '' %>">
+            <input type="text" name="description" value="<%= product.description || '' %>" placeholder="description">
         </div>
         <div>
-            <input type="number" name="price" value="<%= product.title || '' %>">
+            <input type="number" name="price" value="<%= product.price || '' %>" placeholder="price">
         </div>
         <div>
-            <input type="submit" value="Add product">
+            <input type="text" name="imgurl" value="<%= product.imgurl || '' %>" placeholder="Image url">
+        </div>
+        <div>
+            <input type="submit" value="<%= (typeof product.id == 'undefined') ? 'create' : 'update' %>">
         </div>
     </form>
 </body>

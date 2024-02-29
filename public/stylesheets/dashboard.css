@@ -1,0 +1,13 @@
+header div {
+    display: flex;
+    justify-content: space-between;
+}
+
+header a {
+    width: 200px;
+    text-align: center;
+    text-decoration: none;
+    background-color: black;
+    color: white;
+    padding: 20px 25px;
+}
