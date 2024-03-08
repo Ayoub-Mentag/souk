@@ -93,7 +93,33 @@ table {
     -webkit-border-radius: 0 0 6px 0;
     border-radius: 0 0 6px 0;
 }
+
+td > form {
+    text-decoration: none;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+td > a:hover {
+    background-color: black;
+    color: white;
+}
     </style>
+
+    <script>
+        async function addToCard(userId, productId) {
+            await fetch(
+                '/addToCard', 
+                {method: 'POST'}, 
+                {
+                    body: JSON.stringify({
+                    'productId': productId,
+                    'userId': userId
+                })
+                }
+            )
+        }
+    </script>
 </head>
 <body>
     <table class="bordered">
@@ -102,6 +128,7 @@ table {
             <th>price</th>
             <th>number of units</th>
             <th>total</th>
+            <th>In/De crease</th>
         </tr>
         <% products.forEach((product) => { %>
             <tr>
@@ -109,10 +136,22 @@ table {
                 <td><%= product.price%></td>
                 <td><%= product.numberUnits%></td>
                 <td><%= product.numberUnits * product.price%>$</td>
+                <td style="display: flex; justify-content: space-around;">
+                    <form action="/addToCard" method="post">
+                        <input type="number" name="productId" value="<%= product.id %>" hidden>
+                        <input type="number" name="userId" value="<%= product.userId %>" hidden>
+                        <input type="submit" value="+">
+                    </form>
+                    <form action="/removeFromCard" method="post">
+                        <input type="number" name="productId" value="<%= product.id %>" hidden>
+                        <input type="number" name="userId" value="<%= product.userId %>" hidden>
+                        <input type="submit" value="-">
+                    </form>
+                </td>
             </tr>
         <% })%>
         <tr>
-            <td colspan="3">Total price</td>
+            <td colspan="4">Total price</td>
             <td><%= total%>$</td>
         </tr>
     </table>

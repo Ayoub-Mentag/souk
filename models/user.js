@@ -52,7 +52,7 @@ class User {
             id
         };
         return jwt.sign(payload, secretAccessToken, {
-            expiresIn: '20s'
+            expiresIn: '20m'
         });
     };
 

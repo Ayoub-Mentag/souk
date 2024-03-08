@@ -24,7 +24,6 @@ class Card {
     }
 
     static createOrUpdate(data, cb) {
-        console.log("createOrupdate");
         this.find(data.userId, data.productId, (err, product) => {
             let sql;
             if (product === undefined) {
@@ -38,9 +37,28 @@ class Card {
         })
     }
 
+    static removeOrUpdate(data, cb) {
+        this.find(data.userId, data.productId, (err, product) => {
+            let sql;
+            if (product === undefined) {
+                return false;
+            }
+            else {
+                sql = 'UPDATE card SET numberUnits = ? WHERE id = ?';
+                if (product.numberUnits == 1) {
+                    sql = 'DELETE FROM card WHERE userId = ? AND productId = ?';
+                    db.run(sql, data.userId, data.productId, cb);
+                }
+                else {
+                    db.run(sql, product.numberUnits - 1, product.id, cb);
+                }
+            }
+        })
+    }
+
 
     static allProductsMadeByAuser(userId, cb) {
-        let sql = `SELECT c.userId, p.title, p.description, p.price, c.numberUnits FROM card c INNER JOIN products p ON p.id = c.productId Where c.userId = ?`;
+        let sql = `SELECT c.userId, p.id, p.title, p.description, p.price, c.numberUnits FROM card c INNER JOIN products p ON p.id = c.productId Where c.userId = ?`;
         db.all(sql,userId, cb);
     }
 

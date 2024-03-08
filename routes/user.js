@@ -2,6 +2,7 @@ const User = require('../models/user').User;
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const SECRET_ACCESS_TOKEN = require('../config/getEnv.js');
+const { Console } = require('console');
 
 function simpleHash(input) {
     const hash = crypto.createHash('sha256');
@@ -34,6 +35,7 @@ exports.create = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
+    console.log("login post");
     let user = req.body;
     user.password = simpleHash(user.password);
     User.find(user, async (err, data) => {
@@ -43,6 +45,7 @@ exports.login = (req, res, next) => {
             res.redirect('/login');
         }
         else {
+            console.log(user);
             let options = {
                 maxAge: 20 * 60 * 1000, // would expire in 20 minutes
                 httpOnly: true, // The cookie is only accessible by the web server
@@ -50,15 +53,6 @@ exports.login = (req, res, next) => {
                 secure: true,
             };
             const token = User.generateAccessJWT(data.id); // generate session token for user
-            jwt.verify(token, SECRET_ACCESS_TOKEN, async (err, decoded) => {
-                if (err) {
-                    // if token has been altered, return a forbidden error
-                    console.log(err);
-                }
-                else {
-                    const { id } = decoded; // get user id from the decoded token
-                }
-            });
             res.cookie("SessionID", token, options); // set the token to response header, so that the client sends it back on each subsequent request
             res.redirect('/products');
         }

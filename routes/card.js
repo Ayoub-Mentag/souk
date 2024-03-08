@@ -11,7 +11,15 @@ exports.createOrUpdate = (req, res, next) => {
     console.log('create or update ', req.body);
     Card.createOrUpdate(req.body, (err) => {
         if (err) return next(err);
-        res.send("Hello");
+        res.redirect('/productOfAUser');
+    });
+}
+
+exports.removeOrUpdate = (req, res, next) => {
+    console.log('remove or update ', req.body);
+    Card.removeOrUpdate(req.body, (err) => {
+        if (err) return next(err);
+        res.redirect('/productOfAUser');
     });
 }
 

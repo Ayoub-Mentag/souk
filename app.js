@@ -107,6 +107,7 @@ app.get('/productForm/:id', (req, res, next) => {
 
 // *************************Card************************
 app.post('/addToCard', card.createOrUpdate);
+app.post('/removeFromCard', card.removeOrUpdate);
 
 app.get('/card', card.all);
 
