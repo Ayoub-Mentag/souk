@@ -3,6 +3,8 @@
         <div id='menu'>
             <% if (locals.user.username == 'admin') { %>
                 <a href="/productForm">Add a product</a>
+            <% } else { %>
+                <a href="/productOfAUser">Card</a>
             <% } %>
             <a href='/logout'>logout</a>
         </div>

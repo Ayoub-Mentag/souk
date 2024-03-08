@@ -1,5 +1,3 @@
-
-
 <% products.forEach((product) => { %>
     <div class="card">
         <img src="<%=product.imgurl%>" alt="Denim Jeans" style="width:100%">
@@ -13,10 +11,17 @@
             <p>
                 <!-- <button onclick="fetch('/addToCard', {method: 'POST'}, {body: {'productId': '<%=product.id%>', 'userId': '<%=locals.user.id%>'}})"> -->
                 <button>
-                    <a href="" onclick="fetch('/addToCard', {method: 'POST'}, {body: {'productId': '<%=product.id%>', 'userId': '<%=locals.user.id%>'}})">Add to Cart</a>
+                    <p>
+                        <%=product.id%>
+                        <%=locals.user.id%>
+                    </p>
+                    <form action="/addToCard" method="post">
+                        <input type="number" name="userId" value="<%=locals.user.id%>" hidden>
+                        <input type="number" name="productId" value="<%=product.id%>" hidden>
+                        <input type="submit" value="Add to card">
+                    </form>
                 </button>
             </p>
         <% } %>
-
     </div>
 <% }) %>

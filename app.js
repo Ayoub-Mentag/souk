@@ -9,7 +9,9 @@ var user = require('./routes/user');
 const session = require('express-session');
 var permission = require('./middleware/user');
 const { Product } = require('./models/product');
+const { check } = require('express-validator');
 var app = express();
+const Validate = require('./middleware/validate.js');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,17 +30,19 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// app.use(permission.permission);
+app.use(permission);
 app.get('/products', product.all);
-app.post('/products/:id', product.update);;
+app.post('/products/:id', product.update);
 app.post('/products', product.create);
-app.delete('/products/:id', product.delete);;
+app.delete('/products/:id', product.delete);
 
 // *************************User*************************
 app.get('/users', user.all);
 
 app.get('/', (req, res) => res.redirect('/login'));
+
 app.get('/login', (req, res) => {
+  console.log("LOGGGING");
   if (req.session && req.session.message) {
     res.render('login', { message: req.session.message });
     req.session.destroy();
@@ -47,12 +51,44 @@ app.get('/login', (req, res) => {
   }
 });
 
+app.get('/signup', (req, res) => {
+  let usernameError = '';
+  let passwordError = '';
+  let message = '';
+  if (req.session) {
+    if (req.session.usernameError) {
+      usernameError = req.session.usernameError;
+    }
+    if (req.session.passwordError) {
+      passwordError = req.session.passwordError;
+    }
+    if (req.session.message) {
+      message = req.session.message;
+    }
+  }
+  res.render('signup', { usernameError, passwordError, message });
+  req.session.destroy();
+});
 
-app.get('/signup', (req, res) => res.render('signup'));
 app.get('/logout', user.logout);
 app.post('/login', user.login);
-app.post('/signup', user.create);
+
+app.post('/signup',
+        check("username")
+          .notEmpty()
+          .isLength({ min: 8 })
+          .withMessage("Must be at least 8 chars long"),
+        check("password")
+          .notEmpty()
+          .isLength({ min: 8 })
+          .withMessage("Must be at least 8 characters")
+          .matches(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]+$/)
+          .withMessage("Must contain at least one digit, one alphabetic character, and one symbol"),
+        Validate,
+        user.create);
+
 app.put('/users', user.update);
+app.delete('/users/:id', user.delete);
 // ******************************************************
 
 
@@ -74,9 +110,8 @@ app.post('/addToCard', card.createOrUpdate);
 
 app.get('/card', card.all);
 
+app.get('/productOfAUser', card.productOfAuser);
 // *****************************************************
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -3,12 +3,12 @@ const Product = require('../models/product').Product;
 exports.all = (req, res, next) => {
   Product.all((err, products) => {
     if (err) next(err);
-    res.format({
+    res.format({ 
       html: () => {
-        res.send(products);
+        res.render('index', {products: products});
       },
       json: () => {
-        res.render('index', {products: products});
+        res.send(products);
       }
     });
   });
@@ -36,7 +36,6 @@ exports.delete = (req, res, next) => {
   let id = req.params.id;
   Product.delete(id, (err) => {
     if (err) next(err);
-    console.log("DELETE PRODUCT");
     res.redirect('/products');
   });
 }

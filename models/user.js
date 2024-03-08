@@ -1,6 +1,8 @@
 const sqlite3 = require('sqlite3').verbose();
 const dbName = 'souk.sqlite';
 const db = new sqlite3.Database(dbName);
+const secretAccessToken = require('../config/getEnv.js');
+const jwt = require('jsonwebtoken');
 
 db.serialize(() => {
     console.log("Hello serialize\n");
@@ -27,10 +29,14 @@ class User {
     static getUserById(id, cb) {
         db.get('SELECT * FROM users WHERE id = ?', id, cb);
     }
+
     static find(user, cb) {
         db.get('SELECT * FROM users WHERE username = ? AND password = ?', user.username, user.password, cb);
     }
-
+    
+    static findByName(name, cb) {
+        db.get('SELECT * FROM users WHERE username = ?', name, cb);
+    }
     static create(data, cb) {
         const sql = 'INSERT INTO users(username, password) VALUES (?, ?)';
         db.run(sql, data.username, data.password, cb);
@@ -40,6 +46,16 @@ class User {
         if (!id) return cb(new Error('Please provide an id'));
         db.run('DELETE FROM users WHERE id = ?', id, cb);
     }
+
+    static generateAccessJWT(id) {
+        let payload = {
+            id
+        };
+        return jwt.sign(payload, secretAccessToken, {
+            expiresIn: '20s'
+        });
+    };
+
 }
 
 module.exports.User = User;

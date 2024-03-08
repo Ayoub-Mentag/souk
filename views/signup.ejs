@@ -15,12 +15,16 @@
         </div>
         <div class="container">
             <label><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" required>
+            <input type="text" placeholder="Enter Username" name="username">
+            <span>---- <%= usernameError %></span>
+            <br>
             <label><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" required>
+            <input type="password" placeholder="Enter Password" name="password">
+            <span>---- <%= passwordError %></span>
             <button type="submit">Sign up</button>
         </div>
     </form>
     <p style="text-align: center;">If you have an account you can login hree <a href="/login">Log in</a></p>
+    <% include error %>
 </body>
 </html>

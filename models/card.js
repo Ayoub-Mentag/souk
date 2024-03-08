@@ -22,19 +22,16 @@ class Card {
     static find(userId, productId, cb) {
         db.get('SELECT * FROM card WHERE userId = ? AND productId = ?', userId, productId, cb);
     }
+
     static createOrUpdate(data, cb) {
+        console.log("createOrupdate");
         this.find(data.userId, data.productId, (err, product) => {
             let sql;
-            console.log(`====> ${product}`);
-            console.log(`====> ${data.productId} ${data.userId}`);
             if (product === undefined) {
-                console.log("Inserting ... ");
                 sql = 'INSERT INTO card(userId, productId, numberUnits) VALUES (?, ?, ?)';
                 db.run(sql, data.userId, data.productId, 1, cb);
             }
             else {
-                console.log("Updating ... ");
-                console.log(product);
                 sql = 'UPDATE card SET numberUnits = ? WHERE id = ?';
                 db.run(sql, product.numberUnits + 1, product.id, cb);
             }
@@ -43,19 +40,9 @@ class Card {
 
 
     static allProductsMadeByAuser(userId, cb) {
-        let sql = `SELECT
-                    p.title,
-                    p.price,
-                    c.numberUnits
-                FROM
-                    card c
-                    INNER JOIN products p ON p.id = c.productId
-                WHERE
-                    c.userId = ?;
-        `;
-        db.run(sql, userId, cb);
+        let sql = `SELECT c.userId, p.title, p.description, p.price, c.numberUnits FROM card c INNER JOIN products p ON p.id = c.productId Where c.userId = ?`;
+        db.all(sql,userId, cb);
     }
-
 
     static delete(id, cb) {
         if (!id) return cb(new Error('Please provide an id'));

@@ -1,6 +1,7 @@
 const User = require('../models/user').User;
 const crypto = require('crypto');
-
+const jwt = require('jsonwebtoken');
+const SECRET_ACCESS_TOKEN = require('../config/getEnv.js');
 
 function simpleHash(input) {
     const hash = crypto.createHash('sha256');
@@ -15,33 +16,59 @@ exports.all = (req, res, next) => {
 }
 
 exports.create = (req, res, next) => {
-    console.log(req.body);
     let user = req.body;
-    user.password = simpleHash(user.password);
-    User.create(user, (err) => {
+
+    User.findByName(user.username, (err, data) => {
         if (err) next(err);
-        res.redirect('/login');
+        if (data) {
+            req.session.message = 'The username is already taken by another user';
+            return res.redirect('/signup');
+        } else {
+            user.password = simpleHash(user.password);
+            User.create(user, (err) => {
+                if (err) next(err);
+                res.redirect('/login');
+            });
+        }
     });
 }
 
 exports.login = (req, res, next) => {
     let user = req.body;
     user.password = simpleHash(user.password);
-    User.find(user, (err, data) => {
+    User.find(user, async (err, data) => {
         if (err) next(err);
         if (data === undefined) {
             req.session.message = "Invalid creadentials";
             res.redirect('/login');
         }
         else {
-            req.session.uid = data.id;
-                res.redirect('/products');
+            let options = {
+                maxAge: 20 * 60 * 1000, // would expire in 20 minutes
+                httpOnly: true, // The cookie is only accessible by the web server
+                // sameSite: "None",
+                secure: true,
+            };
+            const token = User.generateAccessJWT(data.id); // generate session token for user
+            jwt.verify(token, SECRET_ACCESS_TOKEN, async (err, decoded) => {
+                if (err) {
+                    // if token has been altered, return a forbidden error
+                    console.log(err);
+                }
+                else {
+                    const { id } = decoded; // get user id from the decoded token
+                }
+            });
+            res.cookie("SessionID", token, options); // set the token to response header, so that the client sends it back on each subsequent request
+            res.redirect('/products');
         }
     });
 }
 
 exports.logout = (req, res, next) => {
     req.session.destroy();
+    res.setHeader('Clear-Site-Data', '"cookies"');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     res.redirect('/login');
 }
 
@@ -51,4 +78,18 @@ exports.update = (req, res, next) => {
         if (err) next(err);
         res.send('Update');
     });
+}
+
+
+exports.delete = (req, res, next) => {
+    let id = req.params.id;
+    if (id) {
+        User.delete(id, (err, data) => {
+            if (err) next(err);
+            res.send('Deleted');
+        });
+    }
+    else {
+        res.send('Id is required');
+    }
 }
