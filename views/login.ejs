@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login page</title>
-    <link rel="stylesheet" href="/stylesheets/form.css">`
+    <link rel="stylesheet" href="/stylesheets/form.css">
 </head>
 <body>
     <h2 style="text-align: center;">Login Form</h2>
-
     <form action="/login" method="post">
         <div class="imgcontainer">
             <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="Avatar" class="avatar">
@@ -19,6 +18,11 @@
             <label><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" required>
             <button type="submit">Login</button>
+            <br>
+            <br>
+            <a class="login-with-google-btn" href="/auth/google">
+                Sign in with Google
+            </a>
         </div>
     </form>
     <p style="text-align: center;">If you dont't have an account you can sign up hree <a href="/signup">sign up</a></p>

@@ -1,22 +1,38 @@
 var createError = require('http-errors');
 var express = require('express');
+require('./config/passport-setup');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var product = require('./routes/product');
 var card = require('./routes/card');
 var user = require('./routes/user');
+const cookieSession = require('cookie-session');
 const session = require('express-session');
 var permission = require('./middleware/user');
 const { Product } = require('./models/product');
 const { check } = require('express-validator');
 var app = express();
 const Validate = require('./middleware/validate.js');
+const authRouters = require('./routes/auth');
+const {cookieKey} = require('./config/getEnv');
+const passport = require('passport');
+
+const User = require('./models/user').User;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// set up session cookies
+app.use(cookieSession({
+  maxAge: 24 * 60 * 60 * 1000,
+  keys: [cookieKey]
+}));
+
+// initialize passport
+app.use(passport.initialize());
+app.use(passport.session())
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -30,7 +46,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-app.use(permission);
+// app.use(permission);
 app.get('/products', product.all);
 app.post('/products/:id', product.update);
 app.post('/products', product.create);
@@ -39,10 +55,9 @@ app.delete('/products/:id', product.delete);
 // *************************User*************************
 app.get('/users', user.all);
 
-app.get('/', (req, res) => res.redirect('/login'));
-
 app.get('/login', (req, res) => {
-  console.log("LOGGGING");
+  if (req.cookies["SessionID"])
+    return res.redirect('/products');
   if (req.session && req.session.message) {
     res.render('login', { message: req.session.message });
     req.session.destroy();
@@ -89,6 +104,10 @@ app.post('/signup',
 
 app.put('/users', user.update);
 app.delete('/users/:id', user.delete);
+
+
+app.use('/auth', authRouters);
+app.delete('/users/name/:name', user.deleteByName);
 // ******************************************************
 
 

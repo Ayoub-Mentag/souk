@@ -8,10 +8,10 @@ exports.all = (req, res, next) => {
 }
 
 exports.createOrUpdate = (req, res, next) => {
-    console.log('create or update ', req.body);
+    console.log(req.url);
     Card.createOrUpdate(req.body, (err) => {
         if (err) return next(err);
-        res.redirect('/productOfAUser');
+        res.redirect('back');
     });
 }
 

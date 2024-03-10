@@ -11,10 +11,6 @@
             <p>
                 <!-- <button onclick="fetch('/addToCard', {method: 'POST'}, {body: {'productId': '<%=product.id%>', 'userId': '<%=locals.user.id%>'}})"> -->
                 <button>
-                    <p>
-                        <%=product.id%>
-                        <%=locals.user.id%>
-                    </p>
                     <form action="/addToCard" method="post">
                         <input type="number" name="userId" value="<%=locals.user.id%>" hidden>
                         <input type="number" name="productId" value="<%=product.id%>" hidden>

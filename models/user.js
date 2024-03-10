@@ -40,11 +40,16 @@ class User {
     static create(data, cb) {
         const sql = 'INSERT INTO users(username, password) VALUES (?, ?)';
         db.run(sql, data.username, data.password, cb);
+        console.log(this.lastID);
     }
 
     static delete(id, cb) {
         if (!id) return cb(new Error('Please provide an id'));
         db.run('DELETE FROM users WHERE id = ?', id, cb);
+    }
+
+    static deleteByName(name, cb) {
+        db.run('DELETE FROM users WHERE username = ?', name, cb);
     }
 
     static generateAccessJWT(id) {

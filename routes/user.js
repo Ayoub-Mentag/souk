@@ -1,14 +1,9 @@
 const User = require('../models/user').User;
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const SECRET_ACCESS_TOKEN = require('../config/getEnv.js');
 const { Console } = require('console');
+let simpleHash = require('../config/hashPass');
 
-function simpleHash(input) {
-    const hash = crypto.createHash('sha256');
-    hash.update(input);
-    return hash.digest('hex');
-}
 
 exports.all = (req, res, next) => {
     User.all((err, users) => {
@@ -79,6 +74,20 @@ exports.delete = (req, res, next) => {
     let id = req.params.id;
     if (id) {
         User.delete(id, (err, data) => {
+            if (err) next(err);
+            res.send('Deleted');
+        });
+    }
+    else {
+        res.send('Id is required');
+    }
+}
+
+exports.deleteByName = (req, res, next) => {
+    let name = req.params.name;
+    if (name) {
+        console.log(name);
+        User.deleteByName(name, (err, data) => {
             if (err) next(err);
             res.send('Deleted');
         });
