@@ -5,7 +5,7 @@ exports.all = (req, res, next) => {
     if (err) next(err);
     res.format({ 
       html: () => {
-        res.render('index', {products: products});
+        res.render('index', {products: products, user: req.user});
       },
       json: () => {
         res.send(products);

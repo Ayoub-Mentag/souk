@@ -1,7 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const dbName = 'souk.sqlite';
 const db = new sqlite3.Database(dbName);
-const secretAccessToken = require('../config/getEnv.js');
+const { SECRET_ACCESS_TOKEN } = require('../config/getEnv.js');
 const jwt = require('jsonwebtoken');
 
 db.serialize(() => {
@@ -40,7 +40,6 @@ class User {
     static create(data, cb) {
         const sql = 'INSERT INTO users(username, password) VALUES (?, ?)';
         db.run(sql, data.username, data.password, cb);
-        console.log(this.lastID);
     }
 
     static delete(id, cb) {
@@ -56,7 +55,7 @@ class User {
         let payload = {
             id
         };
-        return jwt.sign(payload, secretAccessToken, {
+        return jwt.sign(payload, SECRET_ACCESS_TOKEN, {
             expiresIn: '20m'
         });
     };

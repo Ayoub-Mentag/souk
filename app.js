@@ -46,7 +46,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// app.use(permission);
+app.use(permission);
 app.get('/products', product.all);
 app.post('/products/:id', product.update);
 app.post('/products', product.create);
@@ -60,7 +60,7 @@ app.get('/login', (req, res) => {
     return res.redirect('/products');
   if (req.session && req.session.message) {
     res.render('login', { message: req.session.message });
-    req.session.destroy();
+    req.session = null;
   } else {
     res.render('login', {message: ""});
   }

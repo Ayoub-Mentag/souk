@@ -8,7 +8,6 @@ exports.all = (req, res, next) => {
 }
 
 exports.createOrUpdate = (req, res, next) => {
-    console.log(req.url);
     Card.createOrUpdate(req.body, (err) => {
         if (err) return next(err);
         res.redirect('back');
@@ -16,7 +15,6 @@ exports.createOrUpdate = (req, res, next) => {
 }
 
 exports.removeOrUpdate = (req, res, next) => {
-    console.log('remove or update ', req.body);
     Card.removeOrUpdate(req.body, (err) => {
         if (err) return next(err);
         res.redirect('/productOfAUser');

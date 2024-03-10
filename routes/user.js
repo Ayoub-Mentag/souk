@@ -30,7 +30,6 @@ exports.create = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-    console.log("login post");
     let user = req.body;
     user.password = simpleHash(user.password);
     User.find(user, async (err, data) => {
@@ -40,7 +39,6 @@ exports.login = (req, res, next) => {
             res.redirect('/login');
         }
         else {
-            console.log(user);
             let options = {
                 maxAge: 20 * 60 * 1000, // would expire in 20 minutes
                 httpOnly: true, // The cookie is only accessible by the web server
@@ -55,7 +53,7 @@ exports.login = (req, res, next) => {
 }
 
 exports.logout = (req, res, next) => {
-    req.session.destroy();
+    req.session = null;
     res.setHeader('Clear-Site-Data', '"cookies"');
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     res.redirect('/login');
@@ -86,7 +84,6 @@ exports.delete = (req, res, next) => {
 exports.deleteByName = (req, res, next) => {
     let name = req.params.name;
     if (name) {
-        console.log(name);
         User.deleteByName(name, (err, data) => {
             if (err) next(err);
             res.send('Deleted');

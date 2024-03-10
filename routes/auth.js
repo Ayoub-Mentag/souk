@@ -8,9 +8,8 @@ router.get('/google', passport.authenticate('google', {
 
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    // res.send('Google redirect');
+    res.locals.user = req.user;
     res.redirect('/products');
 });
-
 
 module.exports = router;

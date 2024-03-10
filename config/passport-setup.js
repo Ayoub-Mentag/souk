@@ -9,8 +9,9 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-    User.findByName(id, (err, user) => {
-        done(err, user);
+    User.getUserById(id, (err, user) => {
+        user.google = 'google';
+        done(null, user);
     });
 });
 
@@ -29,9 +30,9 @@ passport.use(new GoogleStrategy({
             let newUser = {username: displayName, password: simpleHash(displayName)};
             User.create(newUser, (err) => {
                 User.findByName(newUser.username, (err, user) => {
-                    console.log(user);
+                    user.google = 'google';
                     done(null, user);
-                })
+                });
             });
         }
     }));

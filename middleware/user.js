@@ -1,5 +1,5 @@
 const User = require('../models/user').User;
-const SECRET_ACCESS_TOKEN = require('../config/getEnv.js');
+const { SECRET_ACCESS_TOKEN } = require('../config/getEnv.js');
 const jwt = require('jsonwebtoken');
 
 function decode(sessionId) {
@@ -14,7 +14,6 @@ function decode(sessionId) {
         });
     });
 }
-
 
 function resolve(id, req, res, next) {
     User.getUserById(id, (err, result) => {
@@ -36,8 +35,11 @@ function reject(req, res) {
 }
 
 module.exports =  async function permission(req, res, next) {
-    let userId;
-    if (req.url == '/signup') {
+    if (req.url == '/signup' || req.url.search('/auth/google') != -1) {
+        return next();
+    }
+    // check if the user is authenticated with Google
+    if (req.user) {
         return next();
     }
 
@@ -58,7 +60,6 @@ module.exports =  async function permission(req, res, next) {
             return ;
         }
     });
-
     decode(sessionId)
         .then((id) => resolve(id, req, res, next))
         .catch(() => reject(req, res));
