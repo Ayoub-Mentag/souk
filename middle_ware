@@ -1,0 +1,14 @@
+The middleware is a function that resist btw the request and the response
+There could be lots of middleare btw them for example :
+
+app.use(mid1);
+app.use(mid2);
+app.use(mid3);
+app.use(mid4);
+...
+
+app.get('/', (req, res, next) => {
+    res.send('Hello World')
+});
+
+The order of middles is important, especially if one middleware is based on another one;

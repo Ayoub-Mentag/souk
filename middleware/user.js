@@ -9,6 +9,7 @@ function decode(sessionId) {
                 reject();
             else {
                 const { id } = decoded; // get user id from the decoded token
+                console.log('id is ', id);
                 resolve(id);
             }
         });
@@ -29,6 +30,7 @@ function resolve(id, req, res, next) {
 }
 
 function reject(req, res) {
+    console.log('reject');
     req.session.message = 'session id malformed !!';
     res.setHeader('Clear-Site-Data', '"cookies"');
     res.redirect('/login');
