@@ -89,17 +89,17 @@ app.get('/logout', user.logout);
 app.post('/login', user.login);
 
 app.post('/signup',
-        check("username")
-          .notEmpty()
-          .isLength({ min: 8 })
-          .withMessage("Must be at least 8 chars long"),
-        check("password")
-          .notEmpty()
-          .isLength({ min: 8 })
-          .withMessage("Must be at least 8 characters")
-          .matches(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]+$/)
-          .withMessage("Must contain at least one digit, one alphabetic character, and one symbol"),
-        Validate,
+        // check("username")
+        //   .notEmpty()
+        //   .isLength({ min: 8 })
+        //   .withMessage("Must be at least 8 chars long"),
+        // check("password")
+        //   .notEmpty()
+        //   .isLength({ min: 8 })
+        //   .withMessage("Must be at least 8 characters")
+        //   .matches(/^(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]+$/)
+        //   .withMessage("Must contain at least one digit, one alphabetic character, and one symbol"),
+        // Validate,
         user.create);
 
 app.put('/users', user.update);
